@@ -75,6 +75,9 @@ static const char *colorname[] = {
 
 	/* more colors can be added after 255 to use with DefaultXX */
 	"#cccccc",
+	"#a9cdeb",
+	"#ea96eb",
+	"#c9caec",
 };
 
 
@@ -93,6 +96,13 @@ static unsigned int defaultcs = 256;
  */
 static unsigned int defaultitalic = 11;
 static unsigned int defaultunderline = 7;
+
+/*
+ * Whether to not use bold fonts, and whether to use a custom color from the
+ * pallete for bold fonts. This is commented out by default.
+ */
+/* #define NOBOLDFONTS 1 */
+/* #define DEFAULTBOLD 257 */
 
 /* Internal mouse shortcuts. */
 /* Beware that overloading Button1 will disable the selection. */

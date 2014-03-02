@@ -2901,8 +2901,10 @@ xloadfonts(char *fontstr, double fontsize) {
 	if(xloadfont(&dc.ifont, pattern))
 		die("st: can't open font %s\n", fontstr);
 
+#ifndef NOBOLDFONTS
 	FcPatternDel(pattern, FC_WEIGHT);
 	FcPatternAddInteger(pattern, FC_WEIGHT, FC_WEIGHT_BOLD);
+#endif
 	if(xloadfont(&dc.ibfont, pattern))
 		die("st: can't open font %s\n", fontstr);
 
@@ -3187,6 +3189,10 @@ xdraws(char *s, Glyph base, int x, int y, int charlen, int bytelen) {
 			/* greyscale */
 			fg = &dc.col[base.fg + 4];
 		}
+#ifdef DEFAULTBOLD
+		if(base.fg == defaultfg)
+			fg = &dc.col[DEFAULTBOLD];
+#endif
 		/*
 		 * Those ranges will not be brightened:
 		 *    8 - 15 – bright system colors
