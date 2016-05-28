@@ -347,6 +347,7 @@ static void printscreen(const Arg *) ;
 static void iso14755(const Arg *);
 static void toggleprinter(const Arg *);
 static void sendbreak(const Arg *);
+static void togglecolors(const Arg *);
 
 /* Config.h for applying patches and the configuration. */
 #include "config.h"
@@ -555,6 +556,8 @@ static uchar utfbyte[UTF_SIZ + 1] = {0x80,    0, 0xC0, 0xE0, 0xF0};
 static uchar utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
 static Rune utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static Rune utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
+
+static int color_variant = 1;
 
 /* Font Ring Cache */
 enum {
@@ -2629,6 +2632,19 @@ sendbreak(const Arg *arg)
 {
 	if (tcsendbreak(cmdfd, 0))
 		perror("Error sending break");
+}
+
+void
+togglecolors(const Arg *arg)
+{
+  if (color_variant == 1)
+    colorname = light_colors;
+  else
+    colorname = dark_colors;
+
+  xloadcols();
+  redraw();
+  color_variant = 1 - color_variant;
 }
 
 void
