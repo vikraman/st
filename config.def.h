@@ -126,7 +126,11 @@ static const char *dark_colors[] = {
 };
 
 /* Terminal colors (16 first used in escape sequence) */
-static const char **colorname = dark_colors;
+static const char **colorname = light_colors;
+
+/* Times when to switch to light or dark colors */
+static const int light_hour = 6;
+static const int dark_hour = 18;
 
 /*
  * Default colors (colorname index)

@@ -382,6 +382,7 @@ static void execsh(void);
 static void stty(void);
 static void sigchld(int);
 static void run(void);
+static void computecols(void);
 
 static void csidump(void);
 static void csihandle(void);
@@ -557,7 +558,7 @@ static uchar utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
 static Rune utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static Rune utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
 
-static int color_variant = 1;
+static int color_variant = 0;
 
 /* Font Ring Cache */
 enum {
@@ -3651,6 +3652,7 @@ xinit(void)
 		xw.cmap = XDefaultColormap(xw.dpy, xw.scr);
 	else
 		xw.cmap = XCreateColormap(xw.dpy, XRootWindow(xw.dpy, xw.scr), xw.vis, None);
+	computecols();
 	xloadcols();
 
 	/* adjust fixed window geometry */
@@ -4514,6 +4516,24 @@ run(void)
 			}
 		}
 	}
+}
+
+void
+computecols(void)
+{
+  time_t now = time(0);
+  struct tm * curtime = localtime(&now);
+  char str[3];
+  strftime(str, sizeof(str), "%H", curtime);
+  int hour = atoi(str);
+  if (light_hour < hour && hour < dark_hour) {
+    color_variant = 0;
+    colorname = light_colors;
+  }
+  else {
+    color_variant = 1;
+    colorname = dark_colors;
+  }
 }
 
 void
